@@ -1,0 +1,700 @@
+<html>
+
+<head>
+    <title>地理院 標高タイル（DEM10B）+CS立体図+傾斜区分図+レーザ林相図+樹種ポリゴン</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src='https://unpkg.com/maplibre-gl@3.1.0/dist/maplibre-gl.js'></script>
+    <link href='https://unpkg.com/maplibre-gl@3.1.0/dist/maplibre-gl.css' rel='stylesheet' />
+    <script src="https://unpkg.com/pmtiles@2.10.0/dist/index.js"></script>
+    <script type="module" src="maplibre-gl-gsi-terrain-fast-png.js"></script>
+    <style>
+        body {
+            margin: 0;
+        }
+
+        #map {
+            height: 100%;
+            width: 100%;
+        }
+
+        .map-overlay {
+            font: bold 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+            position: absolute;
+            width: 220px;
+            bottom: 20px;
+            left: 0;
+            padding: 10px;
+        }
+
+        .map-overlay .map-overlay-inner {
+            background-color: #fff;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+            border-radius: 3px;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+
+        .map-overlay label {
+            display: block;
+            margin: 0 0 0px;
+            font-size: 12px;
+            top: 100px;
+            left: 10px;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .map-overlay input {
+            background-color: transparent;
+            display: inline-block;
+            width: 100%;
+            position: relative;
+            margin: 0;
+            cursor: ew-resize;
+        }
+
+        #select-tiles {
+            padding: 3px 4px;
+            font: 12px/14px Arial, Helvetica, sans-serif;
+            color: black;
+            background: white;
+            background: rgba(255, 255, 255, 1.0);
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+            border-radius: 5px;
+            width: fit-content;
+            position: absolute;
+            top: 5px;
+            left: 5px;
+            z-index: 10;
+        }
+
+        .legend {
+            background-color: #fff;
+            border-radius: 3px;
+            bottom: 40px;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.10);
+            font: 12px/14px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+            padding: 10px;
+            position: absolute;
+            right: 10px;
+            z-index: 1;
+            line-height: 10px;
+            height: auto;
+        }
+
+        .legend h4 {
+            margin: 0 0 10px;
+        }
+
+        .legend div span {
+            border-radius: 50%;
+            display: inline-block;
+            height: 15px;
+            margin-right: 10px;
+            width: 15px;
+            color: orangered
+        }
+
+        .square {
+            width: 15px;
+            height: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="map"></div>
+    <div id="select-tiles">
+        <label><b>タイルの種類</b></label><br>
+        <select id="tiles" onchange="SelectTiles()">
+            <option value="cs">CS立体図</option>
+            <option value="slopemap">傾斜区分図</option>
+            <option value="ls-standtype">レーザ林相図</option>
+            <option value="tree-specie">樹種ポリゴン</option>
+        </select>
+    </div>
+    <div class="map-overlay top">
+        <div class="map-overlay-inner">
+            <label>タイル 不透明度: <span id="slider-opacity-value">100%</span></label>
+            <input id="slider-opacity" type="range" min="0" max="100" step="1" value="100">
+        </div>
+    </div>
+    <div id="legend" style="display:none;" class='legend'>
+        <h4>樹種ポリゴン</h4>
+        <div class="square" style='background-color: #00cc66; display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">スギ</span><br>
+        <div class="square" style='background-color: #99ff66; display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">ヒノキ類</span><br>
+        <div class="square" style='background-color: #cc0000; display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">マツ類</span><br>
+        <div class="square" style='background-color: #ff9966; display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">カラマツ</span><br>
+        <div class="square" style='background-color: #ffcc99; display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">トドマツ</span><br>
+        <div class="square" style='background-color: #cc6600; display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">エゾマツ</span><br>
+        <div class="square" style='background-color: #cc00cc; display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">その他N</span><br>
+        <div class="square" style='background-color: #ffff99; display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">クヌギ</span><br>
+        <div class="square" style='background-color: #ff9933; display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">ナラ類</span><br>
+        <div class="square" style='background-color: #cc9900; display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">ブナ</span><br>
+        <div class="square" style='background-color: #ffff00; display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">その他L</span><br>
+        <div class="square" style='background-color: #8000ff; display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">タケ</span><br>
+        <div class="square" style='background-color: #8db3e2; display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">針広混交林</span><br>
+        <div class="square" style='background-color: #ccff99; display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">新植地</span><br>
+        <div class="square" style='background-color: #ff80ff; display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">伐採跡地</span><br>
+        <div class="square" style='background-color: #bfbfbf; display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">その他</span><br>
+    </div>
+
+    <script type="text/javascript">
+        // protocolの設定
+        let protocol = new pmtiles.Protocol();
+        maplibregl.addProtocol("pmtiles", protocol.tile);
+
+        const map = new maplibregl.Map({
+            container: 'map',
+            style: 'std.json',
+            // style: 'https://tile2.openstreetmap.jp/styles/osm-bright/style.json',
+            zoom: 8.5,
+            minZoom: 1,
+            maxZoom: 23,
+            pitch: 0,
+            bearing: 0,
+            center: [134.8649, 34.9496],
+            hash: true,
+            attributionControl: false
+        });
+
+        // ズーム・回転
+        map.addControl(new maplibregl.NavigationControl());
+
+        // フルスクリーンモードのオンオフ
+        map.addControl(new maplibregl.FullscreenControl());
+
+        // 現在位置表示
+        map.addControl(new maplibregl.GeolocateControl({
+            positionOptions: {
+                enableHighAccuracy: false
+            },
+            fitBoundsOptions: { maxZoom: 18 },
+            trackUserLocation: true,
+            showUserLocation: true
+        }));
+
+        // スケール表示
+        map.addControl(new maplibregl.ScaleControl({
+            maxWidth: 200,
+            unit: 'metric'
+        }));
+
+        // Attributionを折りたたみ表示
+        map.addControl(new maplibregl.AttributionControl({
+            compact: true,
+            customAttribution: '（<a href="https://twitter.com/shi__works" target="_blank">Twitter</a> | <a href="https://github.com/shi-works/gsi-dem-with-cs-on-maplibre-gl-js" target="_blank">Github</a>） '
+        }));
+
+        // 3D地形コントロール
+        map.addControl(
+            new maplibregl.TerrainControl({
+                source: 'gsi-dem',
+                exaggeration: 1 // 標高を強調する倍率
+            })
+        );
+
+        map.on('load', () => {
+            // 地理院 標高タイルDEM
+            map.addSource("gsi-dem", {
+                type: 'raster-dem',
+                tiles: [
+                    'gsidem://https://cyberjapandata.gsi.go.jp/xyz/dem_png/{z}/{x}/{y}.png',
+                ],
+                attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html#dem" target="_blank">地理院タイル（標高タイル）</a>',
+                tileSize: 256
+            });
+
+            // map.setTerrain({ 'source': 'gsi-dem', 'exaggeration': 1 });
+
+            ///// 【出典】G空間情報センター /////
+            // 兵庫県CS立体図ソース
+            map.addSource("hyogo-cs", {
+                type: 'raster',
+                tiles: [
+                    'https://rinya-hyogo.geospatial.jp/2023/rinya/tile/csmap/{z}/{x}/{y}.png',
+                ],
+                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/csmap_hyogo" target="_blank">兵庫県50㎝メッシュCS立体図</a>',
+                tileSize: 256
+            });
+
+            // 兵庫県CS立体図レイヤ
+            map.addLayer({
+                id: "hyogo-cs",
+                type: "raster",
+                source: "hyogo-cs",
+                minzoom: 0,
+                maxzoom: 18,
+                paint: {
+                    'raster-opacity': 1.0
+                },
+            });
+
+            // 栃木県CS立体図ソース
+            map.addSource("tochigi-cs", {
+                type: 'raster',
+                tiles: [
+                    'https://rinya-tochigi.geospatial.jp/2023/rinya/tile/csmap/{z}/{x}/{y}.png',
+                ],
+                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/csmap_tochigi" target="_blank">栃木県「微地形図（CS立体図）」</a>',
+                tileSize: 256
+            });
+
+            // 栃木県CS立体図レイヤ
+            map.addLayer({
+                id: "tochigi-cs",
+                type: "raster",
+                source: "tochigi-cs",
+                minzoom: 0,
+                maxzoom: 18,
+                paint: {
+                    'raster-opacity': 1.0
+                },
+            });
+
+            // 高知県CS立体図ソース
+            map.addSource("kochi-cs", {
+                type: 'raster',
+                tiles: [
+                    'https://rinya-kochi.geospatial.jp/2023/rinya/tile/csmap/{z}/{x}/{y}.png',
+                ],
+                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/csmap_kochi" target="_blank">高知県「微地形図（CS立体図）」</a>',
+                tileSize: 256
+            });
+
+            // 高知県CS立体図レイヤ
+            map.addLayer({
+                id: "kochi-cs",
+                type: "raster",
+                source: "kochi-cs",
+                minzoom: 0,
+                maxzoom: 18,
+                paint: {
+                    'raster-opacity': 1.0
+                },
+            });
+
+            // 兵庫県傾斜区分図ソース
+            map.addSource("hyogo-slopemap", {
+                type: 'raster',
+                tiles: [
+                    'https://rinya-hyogo.geospatial.jp/2023/rinya/tile/slopemap/{z}/{x}/{y}.png',
+                ],
+                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/slopemap_hyogo" target="_blank">兵庫県「傾斜区分図」</a>',
+                tileSize: 256
+            });
+
+            // 栃木県傾斜区分図ソース
+            map.addSource("tochigi-slopemap", {
+                type: 'raster',
+                tiles: [
+                    'https://rinya-tochigi.geospatial.jp/2023/rinya/tile/slopemap/{z}/{x}/{y}.png',
+                ],
+                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/slopemap_tochigi" target="_blank">栃木県「傾斜区分図」</a>',
+                tileSize: 256
+            });
+
+            // 高知県傾斜区分図ソース
+            map.addSource("kochi-slopemap", {
+                type: 'raster',
+                tiles: [
+                    'https://rinya-kochi.geospatial.jp/2023/rinya/tile/slopemap/{z}/{x}/{y}.png',
+                ],
+                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/slopemap_kochi" target="_blank">高知県「傾斜区分図」</a>',
+                tileSize: 256
+            });
+
+            // 兵庫県レーザ林相図ソース
+            map.addSource("hyogo-ls-standtype", {
+                type: 'raster',
+                tiles: [
+                    'https://rinya-hyogo.geospatial.jp/2023/rinya/tile/ls_standtype/{z}/{x}/{y}.png',
+                ],
+                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/ls_standtype_hyogo" target="_blank">兵庫県「レーザ林相図」</a>',
+                tileSize: 256
+            });
+
+            // 栃木県レーザ林相図ソース
+            map.addSource("tochigi-ls-standtype", {
+                type: 'raster',
+                tiles: [
+                    'https://rinya-tochigi.geospatial.jp/2023/rinya/tile/ls_standtype/{z}/{x}/{y}.png',
+                ],
+                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/ls_standtype_tochigi" target="_blank">栃木県「レーザ林相図」</a>',
+                tileSize: 256
+            });
+
+            // 高知県レーザ林相図ソース
+            map.addSource("kochi-ls-standtype", {
+                type: 'raster',
+                tiles: [
+                    'https://rinya-kochi.geospatial.jp/2023/rinya/tile/ls_standtype/{z}/{x}/{y}.png',
+                ],
+                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/ls_standtype_kochi" target="_blank">高知県「レーザ林相図」</a>',
+                tileSize: 256
+            });
+
+            // 兵庫県樹種ポリゴンソース
+            map.addSource("hyogo-tree-specie", {
+                type: 'vector',
+                tiles: [
+                    "https://rinya-hyogo.geospatial.jp/2023/rinya/tile/tree_species/{z}/{x}/{y}.pbf"
+                ],
+                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/tree_species_hyogo" target="_blank">兵庫県「樹種ポリゴン」</a>',
+            });
+
+            // 栃木県樹種ポリゴンソース
+            map.addSource("tochigi-tree-specie", {
+                type: 'vector',
+                tiles: [
+                    "https://rinya-tochigi.geospatial.jp/2023/rinya/tile/tree_species/{z}/{x}/{y}.pbf"
+                ],
+                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/tree_species_tochigi" target="_blank">栃木県「樹種ポリゴン」</a>',
+            });
+
+            // 高知県樹種ポリゴンソース
+            map.addSource("kochi-tree-specie", {
+                type: 'vector',
+                tiles: [
+                    "https://rinya-kochi.geospatial.jp/2023/rinya/tile/tree_species/{z}/{x}/{y}.pbf"
+                ],
+                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/tree_species_kochi" target="_blank">高知県「樹種ポリゴン」</a>',
+            });
+
+            map.showTileBoundaries = false;
+
+        })
+
+        // スライダーでタイルの不透明度を制御
+        const sliderOpactiy = document.getElementById('slider-opacity');
+        const sliderOpactiyValue = document.getElementById('slider-opacity-value');
+
+        sliderOpactiy.addEventListener('input', (e) => {
+            map.setPaintProperty(
+                'hyogo-cs',
+                'raster-opacity',
+                parseInt(e.target.value, 10) / 100
+            );
+            map.setPaintProperty(
+                'tochigi-cs',
+                'raster-opacity',
+                parseInt(e.target.value, 10) / 100
+            );
+            map.setPaintProperty(
+                'kochi-cs',
+                'raster-opacity',
+                parseInt(e.target.value, 10) / 100
+            );
+            map.setPaintProperty(
+                'hyogo-slopemap',
+                'raster-opacity',
+                parseInt(e.target.value, 10) / 100
+            );
+            map.setPaintProperty(
+                'tochigi-slopemap',
+                'raster-opacity',
+                parseInt(e.target.value, 10) / 100
+            );
+            map.setPaintProperty(
+                'kochi-slopemap',
+                'raster-opacity',
+                parseInt(e.target.value, 10) / 100
+            );
+            map.setPaintProperty(
+                'hyogo-ls-standtype',
+                'raster-opacity',
+                parseInt(e.target.value, 10) / 100
+            );
+            map.setPaintProperty(
+                'tochigi-ls-standtype',
+                'raster-opacity',
+                parseInt(e.target.value, 10) / 100
+            );
+            map.setPaintProperty(
+                'kochi-ls-standtype',
+                'raster-opacity',
+                parseInt(e.target.value, 10) / 100
+            );
+            map.setPaintProperty(
+                'hyogo-tree-specie',
+                'fill-opacity',
+                parseInt(e.target.value, 10) / 100
+            );
+            map.setPaintProperty(
+                'tochigi-tree-specie',
+                'fill-opacity',
+                parseInt(e.target.value, 10) / 100
+            );
+            map.setPaintProperty(
+                'kochi-tree-specie',
+                'fill-opacity',
+                parseInt(e.target.value, 10) / 100
+            );
+            sliderOpactiyValue.textContent = e.target.value + '%';
+        });
+
+        // タイル切り替え制御
+        function SelectTiles() {
+            // valueを取得
+            currentLayerName = document.getElementById('tiles').value;
+
+            // 一旦、全レイヤを削除
+            if (map.getLayer('hyogo-cs')) { map.removeLayer('hyogo-cs') };
+            if (map.getLayer('tochigi-cs')) { map.removeLayer('tochigi-cs') };
+            if (map.getLayer('kochi-cs')) { map.removeLayer('kochi-cs') };
+            if (map.getLayer('hyogo-slopemap')) { map.removeLayer('hyogo-slopemap') };
+            if (map.getLayer('tochigi-slopemap')) { map.removeLayer('tochigi-slopemap') };
+            if (map.getLayer('kochi-slopemap')) { map.removeLayer('kochi-slopemap') };
+            if (map.getLayer('hyogo-ls-standtype')) { map.removeLayer('hyogo-ls-standtype') };
+            if (map.getLayer('tochigi-ls-standtype')) { map.removeLayer('tochigi-ls-standtype') };
+            if (map.getLayer('kochi-ls-standtype')) { map.removeLayer('kochi-ls-standtype') };
+            if (map.getLayer('hyogo-tree-specie')) { map.removeLayer('hyogo-tree-specie') };
+            if (map.getLayer('tochigi-tree-specie')) { map.removeLayer('tochigi-tree-specie') };
+            if (map.getLayer('kochi-tree-specie')) { map.removeLayer('kochi-tree-specie') };
+
+            // レイヤを追加
+            if (currentLayerName === 'cs') {
+                // 兵庫県CS立体図レイヤ
+                map.addLayer({
+                    id: "hyogo-cs",
+                    type: "raster",
+                    source: "hyogo-cs",
+                    minzoom: 0,
+                    maxzoom: 18,
+                    paint: {
+                        'raster-opacity': 1.0
+                    },
+                });
+
+                // 栃木県CS立体図レイヤ
+                map.addLayer({
+                    id: "tochigi-cs",
+                    type: "raster",
+                    source: "tochigi-cs",
+                    minzoom: 0,
+                    maxzoom: 18,
+                    paint: {
+                        'raster-opacity': 1.0
+                    },
+                });
+
+                // 高知県CS立体図レイヤ
+                map.addLayer({
+                    id: "kochi-cs",
+                    type: "raster",
+                    source: "kochi-cs",
+                    minzoom: 0,
+                    maxzoom: 18,
+                    paint: {
+                        'raster-opacity': 1.0
+                    },
+                });
+            } else if (currentLayerName === 'slopemap') {
+                // 兵庫県傾斜区分図レイヤ
+                map.addLayer({
+                    id: "hyogo-slopemap",
+                    type: "raster",
+                    source: "hyogo-slopemap",
+                    minzoom: 0,
+                    maxzoom: 18,
+                    paint: {
+                        'raster-opacity': 1.0
+                    },
+                });
+
+                // 栃木県傾斜区分図レイヤ
+                map.addLayer({
+                    id: "tochigi-slopemap",
+                    type: "raster",
+                    source: "tochigi-slopemap",
+                    minzoom: 0,
+                    maxzoom: 18,
+                    paint: {
+                        'raster-opacity': 1.0
+                    },
+                });
+
+                // 高知県傾斜区分図レイヤ
+                map.addLayer({
+                    id: "kochi-slopemap",
+                    type: "raster",
+                    source: "kochi-slopemap",
+                    minzoom: 0,
+                    maxzoom: 18,
+                    paint: {
+                        'raster-opacity': 1.0
+                    },
+                });
+            } else if (currentLayerName === 'ls-standtype') {
+                // 兵庫県レーザ林相図レイヤ
+                map.addLayer({
+                    id: "hyogo-ls-standtype",
+                    type: "raster",
+                    source: "hyogo-ls-standtype",
+                    minzoom: 0,
+                    maxzoom: 18,
+                    paint: {
+                        'raster-opacity': 1.0
+                    },
+                });
+
+                // 栃木県レーザ林相図レイヤ
+                map.addLayer({
+                    id: "tochigi-ls-standtype",
+                    type: "raster",
+                    source: "tochigi-ls-standtype",
+                    minzoom: 0,
+                    maxzoom: 18,
+                    paint: {
+                        'raster-opacity': 1.0
+                    },
+                });
+
+                // 高知県レーザ林相図レイヤ
+                map.addLayer({
+                    id: "kochi-ls-standtype",
+                    type: "raster",
+                    source: "kochi-ls-standtype",
+                    minzoom: 0,
+                    maxzoom: 18,
+                    paint: {
+                        'raster-opacity': 1.0
+                    },
+                });
+
+            } else if (currentLayerName === 'tree-specie') {
+                // 兵庫県樹種ポリゴンレイヤ
+                map.addLayer({
+                    id: "hyogo-tree-specie",
+                    type: "fill",
+                    source: "hyogo-tree-specie",
+                    "source-layer": "tree_species_hyogo",
+                    minzoom: 0,
+                    maxzoom: 18,
+                    paint: {
+                        'fill-opacity': 1.0,
+                        'fill-color': [
+                            'match',
+                            ['get', '解析樹種ID'],
+                            '01', '#00cc66',
+                            '02', '#99ff66',
+                            '03', '#cc0000',
+                            '04', '#ff9966',
+                            '05', '#ffcc99',
+                            '06', '#cc6600',
+                            '07', '#cc00cc',
+                            '08', '#ffff99',
+                            '09', '#ff9933',
+                            '10', '#cc9900',
+                            '11', '#ffff00',
+                            '12', '#8000ff',
+                            '96', '#8db3e2',
+                            '97', '#ccff99',
+                            '98', '#ff80ff',
+                            '99', '#bfbfbf',
+                            '#000000'  // デフォルトの色
+                        ]
+                    }
+                });
+
+                // 栃木県樹種ポリゴンレイヤ
+                map.addLayer({
+                    id: "tochigi-tree-specie",
+                    type: "fill",
+                    source: "tochigi-tree-specie",
+                    "source-layer": "tree_species_tochigi",
+                    minzoom: 0,
+                    maxzoom: 18,
+                    paint: {
+                        'fill-opacity': 1.0,
+                        'fill-color': [
+                            'match',
+                            ['get', '解析樹種ID'],
+                            '01', '#00cc66',
+                            '02', '#99ff66',
+                            '03', '#cc0000',
+                            '04', '#ff9966',
+                            '05', '#ffcc99',
+                            '06', '#cc6600',
+                            '07', '#cc00cc',
+                            '08', '#ffff99',
+                            '09', '#ff9933',
+                            '10', '#cc9900',
+                            '11', '#ffff00',
+                            '12', '#8000ff',
+                            '96', '#8db3e2',
+                            '97', '#ccff99',
+                            '98', '#ff80ff',
+                            '99', '#bfbfbf',
+                            '#000000'  // デフォルトの色
+                        ]
+                    }
+                });
+
+                // 高知県樹種ポリゴンレイヤ
+                map.addLayer({
+                    id: "kochi-tree-specie",
+                    type: "fill",
+                    source: "kochi-tree-specie",
+                    "source-layer": "tree_species_kochi",
+                    minzoom: 0,
+                    maxzoom: 18,
+                    paint: {
+                        'fill-opacity': 1.0,
+                        'fill-color': [
+                            'match',
+                            ['get', '解析樹種ID'],
+                            '01', '#00cc66',
+                            '02', '#99ff66',
+                            '03', '#cc0000',
+                            '04', '#ff9966',
+                            '05', '#ffcc99',
+                            '06', '#cc6600',
+                            '07', '#cc00cc',
+                            '08', '#ffff99',
+                            '09', '#ff9933',
+                            '10', '#cc9900',
+                            '11', '#ffff00',
+                            '12', '#8000ff',
+                            '96', '#8db3e2',
+                            '97', '#ccff99',
+                            '98', '#ff80ff',
+                            '99', '#bfbfbf',
+                            '#000000'  // デフォルトの色
+                        ]
+                    }
+                });
+            }
+
+            // 凡例の表示切り替え
+            if (currentLayerName === 'tree-specie') {
+                // 表示
+                document.querySelector('#legend').style.display = 'block';
+            }
+            else {
+                // 非表示
+                document.querySelector('#legend').style.display = 'none';
+            }
+
+        }
+    </script>
+</body>
+
+</html>
