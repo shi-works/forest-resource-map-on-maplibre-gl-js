@@ -693,7 +693,12 @@
                 document.querySelector('#legend').style.display = 'none';
             }
 
-        }
+            // 不透明度の初期表示
+            // valueプロパティを直接変更する
+            sliderOpactiyValue.textContent = '100%';
+            sliderOpactiy.value = "100";
+
+        };
     </script>
 </body>
 
