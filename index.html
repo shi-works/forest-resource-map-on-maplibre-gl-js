@@ -1,7 +1,7 @@
 <html>
 
 <head>
-    <title>森林資源マップ（CS立体図・傾斜区分図・レーザ林相図・樹種ポリゴン・森林資源量集計メッシュ）</title>
+    <title>森林資源情報マップ（CS立体図・傾斜区分図・レーザ林相図・樹種ポリゴン・森林資源量集計メッシュ）</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src='https://unpkg.com/maplibre-gl@3.1.0/dist/maplibre-gl.js'></script>
@@ -216,6 +216,23 @@
         </div><span style="display: inline-block; margin-left: 5px;">伐採跡地</span><br>
         <div class="square" style='background-color: #bfbfbf; display: inline-block;'>
         </div><span style="display: inline-block; margin-left: 5px;">その他</span><br>
+    </div>
+    <div id="legen-slopemap" style="display:none;" class='legend'>
+        <h4>傾斜区分図</h4>
+        <div class="square" style='background-color: rgb(107,171,204); display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">20以下</span><br>
+        <div class="square" style='background-color: rgb(179,222,228); display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">20-25</span><br>
+        <div class="square" style='background-color: rgb(235,247,197); display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">25-30</span><br>
+        <div class="square" style='background-color: rgb(255,222,152); display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">30-35</span><br>
+        <div class="square" style='background-color: rgb(252,180,104); display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">35-40</span><br>
+        <div class="square" style='background-color: rgb(241,135,83); display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">40-45</span><br>
+        <div class="square" style='background-color: rgb(216,62,72); display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">45超</span><br>
     </div>
     <script type="text/javascript">
         // protocolの設定
@@ -942,6 +959,16 @@
             else {
                 // 非表示
                 document.querySelector('#legen-fr-mesh20m').style.display = 'none';
+            }
+
+            // 凡例の表示切り替え
+            if (currentLayerName === 'slopemap') {
+                // 表示
+                document.querySelector('#legen-slopemap').style.display = 'block';
+            }
+            else {
+                // 非表示
+                document.querySelector('#legen-slopemap').style.display = 'none';
             }
 
             // 不透明度の初期表示
