@@ -1,3 +1,3 @@
-# gsi-dem-with-cs-slopemap-ls_standtype-tree_species
+# forest-resource-map-on-maplibre-gl-js
 ##
-https://shi-works.github.io/gsi-dem-with-cs-slopemap-ls_standtype-tree_species-fr_mesh20m/
+https://shi-works.github.io/forest-resource-map-on-maplibre-gl-js/
