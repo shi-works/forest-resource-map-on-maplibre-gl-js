@@ -112,6 +112,7 @@
             <option value="slopemap">傾斜区分図</option>
             <option value="ls-standtype">レーザ林相図</option>
             <option value="tree-specie">樹種ポリゴン</option>
+            <option value="fr-mesh20m">森林資源量集計メッシュ</option>
         </select>
     </div>
     <div class="map-overlay top">
@@ -120,7 +121,7 @@
             <input id="slider-opacity" type="range" min="0" max="100" step="1" value="100">
         </div>
     </div>
-    <div id="legend" style="display:none;" class='legend'>
+    <div id="legen-dtree-species" style="display:none;" class='legend'>
         <h4>樹種ポリゴン</h4>
         <div class="square" style='background-color: #00cc66; display: inline-block;'>
         </div><span style="display: inline-block; margin-left: 5px;">スギ</span><br>
@@ -155,7 +156,41 @@
         <div class="square" style='background-color: #bfbfbf; display: inline-block;'>
         </div><span style="display: inline-block; margin-left: 5px;">その他</span><br>
     </div>
-
+    <div id="legen-fr-mesh20m" style="display:none;" class='legend'>
+        <h4>森林資源量集計メッシュ</h4>
+        <div class="square" style='background-color: #00cc66; display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">スギ</span><br>
+        <div class="square" style='background-color: #99ff66; display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">ヒノキ類</span><br>
+        <div class="square" style='background-color: #cc0000; display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">マツ類</span><br>
+        <div class="square" style='background-color: #ff9966; display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">カラマツ</span><br>
+        <div class="square" style='background-color: #ffcc99; display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">トドマツ</span><br>
+        <div class="square" style='background-color: #cc6600; display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">エゾマツ</span><br>
+        <div class="square" style='background-color: #cc00cc; display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">その他N</span><br>
+        <div class="square" style='background-color: #ffff99; display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">クヌギ</span><br>
+        <div class="square" style='background-color: #ff9933; display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">ナラ類</span><br>
+        <div class="square" style='background-color: #cc9900; display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">ブナ</span><br>
+        <div class="square" style='background-color: #ffff00; display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">その他L</span><br>
+        <div class="square" style='background-color: #8000ff; display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">タケ</span><br>
+        <div class="square" style='background-color: #8db3e2; display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">針広混交林</span><br>
+        <div class="square" style='background-color: #ccff99; display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">新植地</span><br>
+        <div class="square" style='background-color: #ff80ff; display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">伐採跡地</span><br>
+        <div class="square" style='background-color: #bfbfbf; display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">その他</span><br>
+    </div>
     <script type="text/javascript">
         // protocolの設定
         let protocol = new pmtiles.Protocol();
@@ -378,6 +413,33 @@
                 attribution: '<a href="https://www.geospatial.jp/ckan/dataset/tree_species_kochi" target="_blank">高知県「樹種ポリゴン」</a>',
             });
 
+            // 兵庫県森林資源量集計メッシュソース
+            map.addSource("hyogo-fr-mesh20m", {
+                type: 'vector',
+                tiles: [
+                    "https://rinya-hyogo.geospatial.jp/2023/rinya/tile/fr_mesh20m/{z}/{x}/{y}.pbf"
+                ],
+                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/fr_mesh20m_hyogo" target="_blank">兵庫県「森林資源量集計メッシュ」</a>',
+            });
+
+            // 栃木県森林資源量集計メッシュソース
+            map.addSource("tochigi-fr-mesh20m", {
+                type: 'vector',
+                tiles: [
+                    "https://rinya-tochigi.geospatial.jp/2023/rinya/tile/fr_mesh20m/{z}/{x}/{y}.pbf"
+                ],
+                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/fr_mesh20m_tochigi" target="_blank">栃木県「森林資源量集計メッシュ」</a>',
+            });
+
+            // 高知県森林資源量集計メッシュソース
+            map.addSource("kochi-fr-mesh20m", {
+                type: 'vector',
+                tiles: [
+                    "https://rinya-kochi.geospatial.jp/2023/rinya/tile/fr_mesh20m/{z}/{x}/{y}.pbf"
+                ],
+                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/fr_mesh20m_kochi" target="_blank">高知県「森林資源量集計メッシュ」</a>',
+            });
+
             map.showTileBoundaries = false;
 
         })
@@ -447,6 +509,21 @@
                 'fill-opacity',
                 parseInt(e.target.value, 10) / 100
             );
+            map.setPaintProperty(
+                'hyogo-fr-mesh20m',
+                'fill-opacity',
+                parseInt(e.target.value, 10) / 100
+            );
+            map.setPaintProperty(
+                'tochigi-fr-mesh20m',
+                'fill-opacity',
+                parseInt(e.target.value, 10) / 100
+            );
+            map.setPaintProperty(
+                'kochi-fr-mesh20m',
+                'fill-opacity',
+                parseInt(e.target.value, 10) / 100
+            );
             sliderOpactiyValue.textContent = e.target.value + '%';
         });
 
@@ -468,6 +545,9 @@
             if (map.getLayer('hyogo-tree-specie')) { map.removeLayer('hyogo-tree-specie') };
             if (map.getLayer('tochigi-tree-specie')) { map.removeLayer('tochigi-tree-specie') };
             if (map.getLayer('kochi-tree-specie')) { map.removeLayer('kochi-tree-specie') };
+            if (map.getLayer('hyogo-fr-mesh20m')) { map.removeLayer('hyogo-fr-mesh20m') };
+            if (map.getLayer('tochigi-fr-mesh20m')) { map.removeLayer('tochigi-fr-mesh20m') };
+            if (map.getLayer('kochi-fr-mesh20m')) { map.removeLayer('kochi-fr-mesh20m') };
 
             // レイヤを追加
             if (currentLayerName === 'cs') {
@@ -681,16 +761,128 @@
                         ]
                     }
                 });
+            } else if (currentLayerName === 'fr-mesh20m') {
+                // 兵庫県森林資源量集計メッシュレイヤ
+                map.addLayer({
+                    id: "hyogo-fr-mesh20m",
+                    type: "fill",
+                    source: "hyogo-fr-mesh20m",
+                    "source-layer": "fr_mesh20m_hyogo",
+                    minzoom: 0,
+                    maxzoom: 18,
+                    paint: {
+                        'fill-opacity': 1.0,
+                        'fill-color': [
+                            'match',
+                            ['get', '解析樹種ID'],
+                            '01', '#00cc66',
+                            '02', '#99ff66',
+                            '03', '#cc0000',
+                            '04', '#ff9966',
+                            '05', '#ffcc99',
+                            '06', '#cc6600',
+                            '07', '#cc00cc',
+                            '08', '#ffff99',
+                            '09', '#ff9933',
+                            '10', '#cc9900',
+                            '11', '#ffff00',
+                            '12', '#8000ff',
+                            '96', '#8db3e2',
+                            '97', '#ccff99',
+                            '98', '#ff80ff',
+                            '99', '#bfbfbf',
+                            '#000000'  // デフォルトの色
+                        ]
+                    }
+                });
+
+                // 栃木県森林資源量集計メッシュレイヤ
+                map.addLayer({
+                    id: "tochigi-fr-mesh20m",
+                    type: "fill",
+                    source: "tochigi-fr-mesh20m",
+                    "source-layer": "fr-mesh20m_tochigi",
+                    minzoom: 0,
+                    maxzoom: 18,
+                    paint: {
+                        'fill-opacity': 1.0,
+                        'fill-color': [
+                            'match',
+                            ['get', '解析樹種ID'],
+                            '01', '#00cc66',
+                            '02', '#99ff66',
+                            '03', '#cc0000',
+                            '04', '#ff9966',
+                            '05', '#ffcc99',
+                            '06', '#cc6600',
+                            '07', '#cc00cc',
+                            '08', '#ffff99',
+                            '09', '#ff9933',
+                            '10', '#cc9900',
+                            '11', '#ffff00',
+                            '12', '#8000ff',
+                            '96', '#8db3e2',
+                            '97', '#ccff99',
+                            '98', '#ff80ff',
+                            '99', '#bfbfbf',
+                            '#000000'  // デフォルトの色
+                        ]
+                    }
+                });
+
+                // 高知県森林資源量集計メッシュレイヤ
+                map.addLayer({
+                    id: "kochi-fr-mesh20m",
+                    type: "fill",
+                    source: "kochi-fr-mesh20m",
+                    "source-layer": "fr-mesh20m_kochi",
+                    minzoom: 0,
+                    maxzoom: 18,
+                    paint: {
+                        'fill-opacity': 1.0,
+                        'fill-color': [
+                            'match',
+                            ['get', '解析樹種ID'],
+                            '01', '#00cc66',
+                            '02', '#99ff66',
+                            '03', '#cc0000',
+                            '04', '#ff9966',
+                            '05', '#ffcc99',
+                            '06', '#cc6600',
+                            '07', '#cc00cc',
+                            '08', '#ffff99',
+                            '09', '#ff9933',
+                            '10', '#cc9900',
+                            '11', '#ffff00',
+                            '12', '#8000ff',
+                            '96', '#8db3e2',
+                            '97', '#ccff99',
+                            '98', '#ff80ff',
+                            '99', '#bfbfbf',
+                            '#000000'  // デフォルトの色
+                        ]
+                    }
+                });
             }
 
             // 凡例の表示切り替え
             if (currentLayerName === 'tree-specie') {
                 // 表示
-                document.querySelector('#legend').style.display = 'block';
+                document.querySelector('#legen-dtree-species').style.display = 'block';
             }
             else {
                 // 非表示
-                document.querySelector('#legend').style.display = 'none';
+                document.querySelector('#legen-dtree-species').style.display = 'none';
+            }
+
+            // 凡例の表示切り替え
+            if (currentLayerName === 'fr-mesh20m') {
+                // 表示
+                document.querySelector('#legen-fr-mesh20m').style.display = 'block';
+            }
+            else {
+                // 非表示
+                document.querySelector('#legen-fr-mesh20m').style.display = 'none';
             }
 
             // 不透明度の初期表示
