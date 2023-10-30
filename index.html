@@ -317,6 +317,7 @@
         );
 
         map.on('load', () => {
+            /*
             // 地理院 標高タイルDEM
             map.addSource("gsi-dem", {
                 type: 'raster-dem',
@@ -327,35 +328,10 @@
                 attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html#dem" target="_blank">地理院タイル（標高タイル）</a>',
                 tileSize: 512
             });
+            */
 
+            // 地理院 標高タイルDEMセット
             map.setTerrain({ 'source': 'gsi-dem', 'exaggeration': 1 });
-
-            // 兵庫県森林資源量集計メッシュソース
-            map.addSource("hyogo-fr-mesh20m", {
-                type: 'vector',
-                tiles: [
-                    "https://rinya-hyogo.geospatial.jp/2023/rinya/tile/fr_mesh20m/{z}/{x}/{y}.pbf"
-                ],
-                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/fr_mesh20m_hyogo" target="_blank">兵庫県 森林資源量集計メッシュ</a>',
-            });
-
-            // 栃木県森林資源量集計メッシュソース
-            map.addSource("tochigi-fr-mesh20m", {
-                type: 'vector',
-                tiles: [
-                    "https://rinya-tochigi.geospatial.jp/2023/rinya/tile/fr_mesh20m/{z}/{x}/{y}.pbf"
-                ],
-                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/fr_mesh20m_tochigi" target="_blank">栃木県 森林資源量集計メッシュ</a>',
-            });
-
-            // 高知県森林資源量集計メッシュソース
-            map.addSource("kochi-fr-mesh20m", {
-                type: 'vector',
-                tiles: [
-                    "https://rinya-kochi.geospatial.jp/2023/rinya/tile/fr_mesh20m/{z}/{x}/{y}.pbf"
-                ],
-                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/fr_mesh20m_kochi" target="_blank">高知県 森林資源量集計メッシュ</a>',
-            });
 
             map.showTileBoundaries = false;
 
