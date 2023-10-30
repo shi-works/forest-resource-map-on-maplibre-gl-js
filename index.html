@@ -7,7 +7,7 @@
     <script src='https://unpkg.com/maplibre-gl@3.4.1/dist/maplibre-gl.js'></script>
     <link href='https://unpkg.com/maplibre-gl@3.4.1/dist/maplibre-gl.css' rel='stylesheet' />
     <script src="https://unpkg.com/pmtiles@2.10.0/dist/index.js"></script>
-    <script type="module" src="maplibre-gl-gsi-terrain-fast-png.js"></script>
+    <!--<script type="module" src="maplibre-gl-gsi-terrain-fast-png.js"></script>-->
     <style>
         body {
             margin: 0;
@@ -321,13 +321,14 @@
             map.addSource("gsi-dem", {
                 type: 'raster-dem',
                 tiles: [
-                    'gsidem://https://cyberjapandata.gsi.go.jp/xyz/dem_png/{z}/{x}/{y}.png',
+                    // 'gsidem://https://cyberjapandata.gsi.go.jp/xyz/dem_png/{z}/{x}/{y}.png',
+                    'https://x.optgeo.org/et10b/et512/{z}/{x}/{y}.webp',
                 ],
                 attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html#dem" target="_blank">地理院タイル（標高タイル）</a>',
                 tileSize: 256
             });
 
-            // map.setTerrain({ 'source': 'gsi-dem', 'exaggeration': 1 });
+            map.setTerrain({ 'source': 'gsi-dem', 'exaggeration': 1 });
 
             // 兵庫県森林資源量集計メッシュソース
             map.addSource("hyogo-fr-mesh20m", {
