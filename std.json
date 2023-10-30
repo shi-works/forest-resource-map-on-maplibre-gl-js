@@ -12,6 +12,128 @@
 				"pmtiles://https://cyberjapandata.gsi.go.jp/xyz/optimal_bvmap-v1/optimal_bvmap-v1.pmtiles/{z}/{x}/{y}"
 			],
 			"attribution": "<a href='https://github.com/gsi-cyberjapan/optimal_bvmap' target='_blank'>国土地理院最適化ベクトルタイル(標準地図風スタイル)</a>"
+		},
+		"seamlessphoto": {
+			"type": "raster",
+			"tiles": [
+				"https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg"
+			],
+			"attribution": "<a href='https://maps.gsi.go.jp/development/ichiran.html#seamlessphoto' target='_blank'>全国最新写真（シームレス）</a>",
+			"tileSize": 256
+		},
+		"hyogo-cs": {
+			"type": "raster",
+			"tiles": [
+				"https://rinya-hyogo.geospatial.jp/2023/rinya/tile/csmap/{z}/{x}/{y}.png"
+			],
+			"attribution": "<a href='https://www.geospatial.jp/ckan/dataset/csmap_hyogo' target='_blank'>兵庫県50㎝メッシュCS立体図</a>",
+			"tileSize": 256
+		},
+		"tochigi-cs": {
+			"type": "raster",
+			"tiles": [
+				"https://rinya-tochigi.geospatial.jp/2023/rinya/tile/csmap/{z}/{x}/{y}.png"
+			],
+			"attribution": "<a href='https://www.geospatial.jp/ckan/dataset/csmap_tochigi' target='_blank'>栃木県 微地形図（CS立体図）</a>",
+			"tileSize": 256
+		},
+		"kochi-cs": {
+			"type": "raster",
+			"tiles": [
+				"https://rinya-kochi.geospatial.jp/2023/rinya/tile/csmap/{z}/{x}/{y}.png"
+			],
+			"attribution": "<a href='https://www.geospatial.jp/ckan/dataset/csmap_kochi' target='_blank'>高知県 微地形図（CS立体図）</a>",
+			"tileSize": 256
+		},
+		"hyogo-slopemap": {
+			"type": "raster",
+			"tiles": [
+				"https://rinya-hyogo.geospatial.jp/2023/rinya/tile/slopemap/{z}/{x}/{y}.png"
+			],
+			"attribution": "<a href='https://www.geospatial.jp/ckan/dataset/slopemap_hyogo' target='_blank'>兵庫県 傾斜区分図</a>",
+			"tileSize": 256
+		},
+		"tochigi-slopemap": {
+			"type": "raster",
+			"tiles": [
+				"https://rinya-tochigi.geospatial.jp/2023/rinya/tile/slopemap/{z}/{x}/{y}.png"
+			],
+			"attribution": "<a href='https://www.geospatial.jp/ckan/dataset/slopemap_tochigi' target='_blank'>栃木県 傾斜区分図</a>",
+			"tileSize": 256
+		},
+		"kochi-slopemap": {
+			"type": "raster",
+			"tiles": [
+				"https://rinya-kochi.geospatial.jp/2023/rinya/tile/slopemap/{z}/{x}/{y}.png"
+			],
+			"attribution": "<a href='https://www.geospatial.jp/ckan/dataset/slopemap_kochi' target='_blank'>高知県 傾斜区分図</a>",
+			"tileSize": 256
+		},
+		"hyogo-ls-standtype": {
+			"type": "raster",
+			"tiles": [
+				"https://rinya-hyogo.geospatial.jp/2023/rinya/tile/ls_standtype/{z}/{x}/{y}.png"
+			],
+			"attribution": "<a href='https://www.geospatial.jp/ckan/dataset/ls_standtype_hyogo' target='_blank'>兵庫県 レーザ林相図</a>",
+			"tileSize": 256
+		},
+		"tochigi-ls-standtype": {
+			"type": "raster",
+			"tiles": [
+				"https://rinya-tochigi.geospatial.jp/2023/rinya/tile/ls_standtype/{z}/{x}/{y}.png"
+			],
+			"attribution": "<a href='https://www.geospatial.jp/ckan/dataset/ls_standtype_tochigi' target='_blank'>栃木県 レーザ林相図</a>",
+			"tileSize": 256
+		},
+		"kochi-ls-standtype": {
+			"type": "raster",
+			"tiles": [
+				"https://rinya-kochi.geospatial.jp/2023/rinya/tile/ls_standtype/{z}/{x}/{y}.png"
+			],
+			"attribution": "<a href='https://www.geospatial.jp/ckan/dataset/ls_standtype_kochi' target='_blank'>高知県 レーザ林相図</a>",
+			"tileSize": 256
+		},
+		"hyogo-tree-specie": {
+			"type": "vector",
+			"tiles": [
+				"https://rinya-hyogo.geospatial.jp/2023/rinya/tile/tree_species/{z}/{x}/{y}.pbf"
+			],
+			"attribution": "<a href='https://www.geospatial.jp/ckan/dataset/tree_species_hyogo' target='_blank'>兵庫県 樹種ポリゴン</a>"
+		},
+		"tochigi-tree-specie": {
+			"type": "vector",
+			"tiles": [
+				"https://rinya-tochigi.geospatial.jp/2023/rinya/tile/tree_species/{z}/{x}/{y}.pbf"
+			],
+			"attribution": "<a href='https://www.geospatial.jp/ckan/dataset/tree_species_tochigi' target='_blank'>栃木県 樹種ポリゴン</a>"
+		},
+		"kochi-tree-specie": {
+			"type": "vector",
+			"tiles": [
+				"https://rinya-kochi.geospatial.jp/2023/rinya/tile/tree_species/{z}/{x}/{y}.pbf"
+			],
+			"attribution": "<a href='https://www.geospatial.jp/ckan/dataset/tree_species_kochi' target='_blank'>高知県 樹種ポリゴン</a>"
+		},
+		"hyogo-fr-mesh20m": {
+			"type": "vector",
+			"tiles": [
+				"https://rinya-hyogo.geospatial.jp/2023/rinya/tile/fr_mesh20m/{z}/{x}/{y}.pbf"
+			],
+			"attribution": "<a href='https://www.geospatial.jp/ckan/dataset/fr_mesh20m_hyogo' target='_blank'>兵庫県 森林資源量集計メッシュ</a>"
+		},
+		"tochigi-fr-mesh20m": {
+			"type": "vector",
+			"tiles": [
+				"https://rinya-tochigi.geospatial.jp/2023/rinya/tile/fr_mesh20m/{z}/{x}/{y}.pbf"
+			],
+			"attribution": "<a href='https://www.geospatial.jp/ckan/dataset/fr_mesh20m_tochigi' target='_blank'>栃木県 森林資源量集計メッシュ</a>"
+		},
+		"kochi-fr-mesh20m": {
+			"type": "vector",
+			"tiles": [
+				"https://rinya-kochi.geospatial.jp/2023/rinya/tile/fr_mesh20m/{z}/{x}/{y}.pbf"
+			],
+			"attribution": "<a href='https://www.geospatial.jp/ckan/dataset/fr_mesh20m_kochi' target='_blank'>高知県 森林資源量集計メッシュ</a>"
 		}
 	},
 	"layers": [
@@ -39,6 +161,457 @@
 			"source-layer": "AdmArea",
 			"paint": {
 				"fill-color": "rgba(255,255,255,1)"
+			}
+		},
+		{
+			"id": "seamlessphoto",
+			"type": "raster",
+			"source": "seamlessphoto",
+			"minzoom": 0,
+			"maxzoom": 18,
+			"paint": {
+				"raster-opacity": 0
+			}
+		},
+		{
+			"id": "hyogo-cs",
+			"type": "raster",
+			"source": "hyogo-cs",
+			"minzoom": 0,
+			"maxzoom": 18,
+			"layout": {
+				"visibility": "visible"
+			},
+			"paint": {
+				"raster-opacity": 1
+			}
+		},
+		{
+			"id": "tochigi-cs",
+			"type": "raster",
+			"source": "tochigi-cs",
+			"minzoom": 0,
+			"maxzoom": 18,
+			"layout": {
+				"visibility": "visible"
+			},
+			"paint": {
+				"raster-opacity": 1
+			}
+		},
+		{
+			"id": "kochi-cs",
+			"type": "raster",
+			"source": "kochi-cs",
+			"minzoom": 0,
+			"maxzoom": 18,
+			"layout": {
+				"visibility": "visible"
+			},
+			"paint": {
+				"raster-opacity": 1
+			}
+		},
+		{
+			"id": "hyogo-slopemap",
+			"type": "raster",
+			"source": "hyogo-slopemap",
+			"minzoom": 0,
+			"maxzoom": 18,
+			"layout": {
+				"visibility": "none"
+			},
+			"paint": {
+				"raster-opacity": 1
+			}
+		},
+		{
+			"id": "tochigi-slopemap",
+			"type": "raster",
+			"source": "tochigi-slopemap",
+			"minzoom": 0,
+			"maxzoom": 18,
+			"layout": {
+				"visibility": "none"
+			},
+			"paint": {
+				"raster-opacity": 1
+			}
+		},
+		{
+			"id": "kochi-slopemap",
+			"type": "raster",
+			"source": "kochi-slopemap",
+			"minzoom": 0,
+			"maxzoom": 18,
+			"layout": {
+				"visibility": "none"
+			},
+			"paint": {
+				"raster-opacity": 1
+			}
+		},
+		{
+			"id": "hyogo-ls-standtype",
+			"type": "raster",
+			"source": "hyogo-ls-standtype",
+			"minzoom": 0,
+			"maxzoom": 18,
+			"layout": {
+				"visibility": "none"
+			},
+			"paint": {
+				"raster-opacity": 1
+			}
+		},
+		{
+			"id": "tochigi-ls-standtype",
+			"type": "raster",
+			"source": "tochigi-ls-standtype",
+			"minzoom": 0,
+			"maxzoom": 18,
+			"layout": {
+				"visibility": "none"
+			},
+			"paint": {
+				"raster-opacity": 1
+			}
+		},
+		{
+			"id": "kochi-ls-standtype",
+			"type": "raster",
+			"source": "kochi-ls-standtype",
+			"minzoom": 0,
+			"maxzoom": 18,
+			"layout": {
+				"visibility": "none"
+			},
+			"paint": {
+				"raster-opacity": 1
+			}
+		},
+		{
+			"id": "hyogo-tree-specie",
+			"type": "fill",
+			"source": "hyogo-tree-specie",
+			"source-layer": "tree_species_hyogo",
+			"minzoom": 0,
+			"maxzoom": 18,
+			"layout": {
+				"visibility": "none"
+			},
+			"paint": {
+				"fill-opacity": 1,
+				"fill-color": [
+					"match",
+					[
+						"get",
+						"解析樹種ID"
+					],
+					"01",
+					"#00cc66",
+					"02",
+					"#99ff66",
+					"03",
+					"#cc0000",
+					"04",
+					"#ff9966",
+					"05",
+					"#ffcc99",
+					"06",
+					"#cc6600",
+					"07",
+					"#cc00cc",
+					"08",
+					"#ffff99",
+					"09",
+					"#ff9933",
+					"10",
+					"#cc9900",
+					"11",
+					"#ffff00",
+					"12",
+					"#8000ff",
+					"96",
+					"#8db3e2",
+					"97",
+					"#ccff99",
+					"98",
+					"#ff80ff",
+					"99",
+					"#bfbfbf",
+					"rgba(255,255,255,0)"
+				]
+			}
+		},
+		{
+			"id": "tochigi-tree-specie",
+			"type": "fill",
+			"source": "tochigi-tree-specie",
+			"source-layer": "tree_species_tochigi",
+			"minzoom": 0,
+			"maxzoom": 18,
+			"layout": {
+				"visibility": "none"
+			},
+			"paint": {
+				"fill-opacity": 1,
+				"fill-color": [
+					"match",
+					[
+						"get",
+						"解析樹種ID"
+					],
+					"01",
+					"#00cc66",
+					"02",
+					"#99ff66",
+					"03",
+					"#cc0000",
+					"04",
+					"#ff9966",
+					"05",
+					"#ffcc99",
+					"06",
+					"#cc6600",
+					"07",
+					"#cc00cc",
+					"08",
+					"#ffff99",
+					"09",
+					"#ff9933",
+					"10",
+					"#cc9900",
+					"11",
+					"#ffff00",
+					"12",
+					"#8000ff",
+					"96",
+					"#8db3e2",
+					"97",
+					"#ccff99",
+					"98",
+					"#ff80ff",
+					"99",
+					"#bfbfbf",
+					"rgba(255,255,255,0)"
+				]
+			}
+		},
+		{
+			"id": "kochi-tree-specie",
+			"type": "fill",
+			"source": "kochi-tree-specie",
+			"source-layer": "tree_species_kochi",
+			"minzoom": 0,
+			"maxzoom": 18,
+			"layout": {
+				"visibility": "none"
+			},
+			"paint": {
+				"fill-opacity": 1,
+				"fill-color": [
+					"match",
+					[
+						"get",
+						"解析樹種ID"
+					],
+					"01",
+					"#00cc66",
+					"02",
+					"#99ff66",
+					"03",
+					"#cc0000",
+					"04",
+					"#ff9966",
+					"05",
+					"#ffcc99",
+					"06",
+					"#cc6600",
+					"07",
+					"#cc00cc",
+					"08",
+					"#ffff99",
+					"09",
+					"#ff9933",
+					"10",
+					"#cc9900",
+					"11",
+					"#ffff00",
+					"12",
+					"#8000ff",
+					"96",
+					"#8db3e2",
+					"97",
+					"#ccff99",
+					"98",
+					"#ff80ff",
+					"99",
+					"#bfbfbf",
+					"rgba(255,255,255,0)"
+				]
+			}
+		},
+		{
+			"id": "hyogo-fr-mesh20m",
+			"type": "fill",
+			"source": "hyogo-fr-mesh20m",
+			"source-layer": "fr_mesh20m_hyogo",
+			"minzoom": 0,
+			"maxzoom": 18,
+			"layout": {
+				"visibility": "none"
+			},
+			"paint": {
+				"fill-opacity": 1,
+				"fill-color": [
+					"match",
+					[
+						"get",
+						"解析樹種ID"
+					],
+					"01",
+					"#00cc66",
+					"02",
+					"#99ff66",
+					"03",
+					"#cc0000",
+					"04",
+					"#ff9966",
+					"05",
+					"#ffcc99",
+					"06",
+					"#cc6600",
+					"07",
+					"#cc00cc",
+					"08",
+					"#ffff99",
+					"09",
+					"#ff9933",
+					"10",
+					"#cc9900",
+					"11",
+					"#ffff00",
+					"12",
+					"#8000ff",
+					"96",
+					"#8db3e2",
+					"97",
+					"#ccff99",
+					"98",
+					"#ff80ff",
+					"99",
+					"#bfbfbf",
+					"rgba(255,255,255,0)"
+				]
+			}
+		},
+		{
+			"id": "tochigi-fr-mesh20m",
+			"type": "fill",
+			"source": "tochigi-fr-mesh20m",
+			"source-layer": "fr_mesh20m_tochigi",
+			"minzoom": 0,
+			"maxzoom": 18,
+			"layout": {
+				"visibility": "none"
+			},
+			"paint": {
+				"fill-opacity": 1,
+				"fill-color": [
+					"match",
+					[
+						"get",
+						"解析樹種ID"
+					],
+					"01",
+					"#00cc66",
+					"02",
+					"#99ff66",
+					"03",
+					"#cc0000",
+					"04",
+					"#ff9966",
+					"05",
+					"#ffcc99",
+					"06",
+					"#cc6600",
+					"07",
+					"#cc00cc",
+					"08",
+					"#ffff99",
+					"09",
+					"#ff9933",
+					"10",
+					"#cc9900",
+					"11",
+					"#ffff00",
+					"12",
+					"#8000ff",
+					"96",
+					"#8db3e2",
+					"97",
+					"#ccff99",
+					"98",
+					"#ff80ff",
+					"99",
+					"#bfbfbf",
+					"rgba(255,255,255,0)"
+				]
+			}
+		},
+		{
+			"id": "kochi-fr-mesh20m",
+			"type": "fill",
+			"source": "kochi-fr-mesh20m",
+			"source-layer": "fr_mesh20m_kochi",
+			"minzoom": 0,
+			"maxzoom": 18,
+			"layout": {
+				"visibility": "none"
+			},
+			"paint": {
+				"fill-opacity": 1,
+				"fill-color": [
+					"match",
+					[
+						"get",
+						"解析樹種ID"
+					],
+					"01",
+					"#00cc66",
+					"02",
+					"#99ff66",
+					"03",
+					"#cc0000",
+					"04",
+					"#ff9966",
+					"05",
+					"#ffcc99",
+					"06",
+					"#cc6600",
+					"07",
+					"#cc00cc",
+					"08",
+					"#ffff99",
+					"09",
+					"#ff9933",
+					"10",
+					"#cc9900",
+					"11",
+					"#ffff00",
+					"12",
+					"#8000ff",
+					"96",
+					"#8db3e2",
+					"97",
+					"#ccff99",
+					"98",
+					"#ff80ff",
+					"99",
+					"#bfbfbf",
+					"rgba(255,255,255,0)"
+				]
 			}
 		},
 		{

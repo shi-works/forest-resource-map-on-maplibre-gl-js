@@ -4,8 +4,8 @@
     <title>森林資源情報マップ（CS立体図・傾斜区分図・レーザ林相図・樹種ポリゴン・森林資源量集計メッシュ）</title>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <script src='https://unpkg.com/maplibre-gl@3.1.0/dist/maplibre-gl.js'></script>
-    <link href='https://unpkg.com/maplibre-gl@3.1.0/dist/maplibre-gl.css' rel='stylesheet' />
+    <script src='https://unpkg.com/maplibre-gl@3.4.1/dist/maplibre-gl.js'></script>
+    <link href='https://unpkg.com/maplibre-gl@3.4.1/dist/maplibre-gl.css' rel='stylesheet' />
     <script src="https://unpkg.com/pmtiles@2.10.0/dist/index.js"></script>
     <script type="module" src="maplibre-gl-gsi-terrain-fast-png.js"></script>
     <style>
@@ -21,7 +21,7 @@
         .map-overlay {
             font: bold 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
             position: absolute;
-            width: 220px;
+            width: 180px;
             bottom: 20px;
             left: 0;
             padding: 10px;
@@ -132,17 +132,19 @@
     <div id="select-tiles">
         <label><b>タイルの種類</b></label><br>
         <select id="tiles" onchange="SelectTiles()">
-            <option value="cs">CS立体図</option>
-            <option value="slopemap">傾斜区分図</option>
-            <option value="ls-standtype">レーザ林相図</option>
-            <option value="tree-specie">樹種ポリゴン</option>
-            <option value="fr-mesh20m">森林資源量集計メッシュ</option>
+            <option value="cs">CS立体図(兵庫県・栃木県・高知県)</option>
+            <option value="slopemap-hyogo">傾斜区分図(兵庫県)</option>
+            <option value="slopemap-tochigi">傾斜区分図(栃木県)</option>
+            <option value="slopemap-kochi">傾斜区分図(高知県)</option>
+            <option value="ls-standtype">レーザ林相図(兵庫県・栃木県・高知県)</option>
+            <option value="tree-specie">樹種ポリゴン(兵庫県・栃木県・高知県)</option>
+            <option value="fr-mesh20m">森林資源量集計メッシュ(兵庫県・栃木県・高知県)</option>
         </select>
     </div>
     <div class="map-overlay top">
         <div class="map-overlay-inner">
-            <label>タイル 不透明度: <span id="tiles-slider-opacity-value">80%</span></label>
-            <input id="tiles-slider-opacity" type="range" min="0" max="100" step="1" value="80">
+            <label>タイル 不透明度: <span id="tiles-slider-opacity-value">100%</span></label>
+            <input id="tiles-slider-opacity" type="range" min="0" max="100" step="1" value="100">
             <label>空中写真 不透明度: <span id="photo-slider-opacity-value">0%</span></label>
             <input id="photo-slider-opacity" type="range" min="0" max="100" step="0" value="0">
         </div>
@@ -217,8 +219,8 @@
         <div class="square" style='background-color: #bfbfbf; display: inline-block;'>
         </div><span style="display: inline-block; margin-left: 5px;">その他</span><br>
     </div>
-    <div id="legen-slopemap" style="display:none;" class='legend'>
-        <h4>傾斜区分図</h4>
+    <div id="legen-slopemap-hyogo" style="display:none;" class='legend'>
+        <h4>傾斜区分図<br>(兵庫県)</h4>
         <div class="square" style='background-color: rgb(107,171,204); display: inline-block;'>
         </div><span style="display: inline-block; margin-left: 5px;">20以下</span><br>
         <div class="square" style='background-color: rgb(179,222,228); display: inline-block;'>
@@ -234,6 +236,30 @@
         <div class="square" style='background-color: rgb(216,62,72); display: inline-block;'>
         </div><span style="display: inline-block; margin-left: 5px;">45超</span><br>
     </div>
+    <div id="legen-slopemap-tochigi" style="display:none;" class='legend'>
+        <h4>傾斜区分図<br>(栃木県)</h4>
+        <div class="square" style='background-color: rgb(0,0,254); display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">-15.0°</span><br>
+        <div class="square" style='background-color: rgb(84,255,0); display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">15.0°-30.0°</span><br>
+        <div class="square" style='background-color: rgb(255,255,0); display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">30.0°-35.0°</span><br>
+        <div class="square" style='background-color: rgb(254,0,0); display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">35.0°-</span><br>
+    </div>
+    <div id="legen-slopemap-kochi" style="display:none;" class='legend'>
+        <h4>傾斜区分図<br>(高知県)</h4>
+        <div class="square" style='background-color: rgb(0,1,250); display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">0以上15未満</span><br>
+        <div class="square" style='background-color: rgb(51,193,255); display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">15以上30未満</span><br>
+        <div class="square" style='background-color: rgb(182,255,140); display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">30以上40未満</span><br>
+        <div class="square" style='background-color: rgb(255,200,1); display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">40以上45未満</span><br>
+        <div class="square" style='background-color: rgb(254,0,0); display: inline-block;'>
+        </div><span style="display: inline-block; margin-left: 5px;">45以上</span><br>
+    </div>
     <script type="text/javascript">
         // protocolの設定
         let protocol = new pmtiles.Protocol();
@@ -248,6 +274,7 @@
             maxZoom: 23,
             pitch: 0,
             bearing: 0,
+            maxPitch: 85,
             center: [134.8649, 34.9496],
             hash: true,
             attributionControl: false
@@ -302,187 +329,13 @@
 
             // map.setTerrain({ 'source': 'gsi-dem', 'exaggeration': 1 });
 
-            // 全国最新写真（シームレス）ソース
-            map.addSource('seamlessphoto', {
-                type: 'raster',
-                tiles: ['https://cyberjapandata.gsi.go.jp/xyz/seamlessphoto/{z}/{x}/{y}.jpg'],
-                tileSize: 256,
-                attribution: '<a href="https://maps.gsi.go.jp/development/ichiran.html#seamlessphoto">全国最新写真（シームレス）</a>'
-            });
-
-            // 全国最新写真（シームレス）レイヤ
-            map.addLayer({
-                id: 'seamlessphoto',
-                type: 'raster',
-                source: 'seamlessphoto',
-                minzoom: 12,
-                maxzoom: 23,
-                paint: {
-                    'raster-opacity': 0
-                },
-            });
-
-            ///// 【出典】G空間情報センター /////
-            // 兵庫県CS立体図ソース
-            map.addSource("hyogo-cs", {
-                type: 'raster',
-                tiles: [
-                    'https://rinya-hyogo.geospatial.jp/2023/rinya/tile/csmap/{z}/{x}/{y}.png',
-                ],
-                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/csmap_hyogo" target="_blank">兵庫県50㎝メッシュCS立体図</a>',
-                tileSize: 256
-            });
-
-            // 兵庫県CS立体図レイヤ
-            map.addLayer({
-                id: "hyogo-cs",
-                type: "raster",
-                source: "hyogo-cs",
-                minzoom: 0,
-                maxzoom: 18,
-                paint: {
-                    'raster-opacity': 0.8
-                },
-            });
-
-            // 栃木県CS立体図ソース
-            map.addSource("tochigi-cs", {
-                type: 'raster',
-                tiles: [
-                    'https://rinya-tochigi.geospatial.jp/2023/rinya/tile/csmap/{z}/{x}/{y}.png',
-                ],
-                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/csmap_tochigi" target="_blank">栃木県「微地形図（CS立体図）」</a>',
-                tileSize: 256
-            });
-
-            // 栃木県CS立体図レイヤ
-            map.addLayer({
-                id: "tochigi-cs",
-                type: "raster",
-                source: "tochigi-cs",
-                minzoom: 0,
-                maxzoom: 18,
-                paint: {
-                    'raster-opacity': 0.8
-                },
-            });
-
-            // 高知県CS立体図ソース
-            map.addSource("kochi-cs", {
-                type: 'raster',
-                tiles: [
-                    'https://rinya-kochi.geospatial.jp/2023/rinya/tile/csmap/{z}/{x}/{y}.png',
-                ],
-                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/csmap_kochi" target="_blank">高知県「微地形図（CS立体図）」</a>',
-                tileSize: 256
-            });
-
-            // 高知県CS立体図レイヤ
-            map.addLayer({
-                id: "kochi-cs",
-                type: "raster",
-                source: "kochi-cs",
-                minzoom: 0,
-                maxzoom: 18,
-                paint: {
-                    'raster-opacity': 0.8
-                },
-            });
-
-            // 兵庫県傾斜区分図ソース
-            map.addSource("hyogo-slopemap", {
-                type: 'raster',
-                tiles: [
-                    'https://rinya-hyogo.geospatial.jp/2023/rinya/tile/slopemap/{z}/{x}/{y}.png',
-                ],
-                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/slopemap_hyogo" target="_blank">兵庫県「傾斜区分図」</a>',
-                tileSize: 256
-            });
-
-            // 栃木県傾斜区分図ソース
-            map.addSource("tochigi-slopemap", {
-                type: 'raster',
-                tiles: [
-                    'https://rinya-tochigi.geospatial.jp/2023/rinya/tile/slopemap/{z}/{x}/{y}.png',
-                ],
-                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/slopemap_tochigi" target="_blank">栃木県「傾斜区分図」</a>',
-                tileSize: 256
-            });
-
-            // 高知県傾斜区分図ソース
-            map.addSource("kochi-slopemap", {
-                type: 'raster',
-                tiles: [
-                    'https://rinya-kochi.geospatial.jp/2023/rinya/tile/slopemap/{z}/{x}/{y}.png',
-                ],
-                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/slopemap_kochi" target="_blank">高知県「傾斜区分図」</a>',
-                tileSize: 256
-            });
-
-            // 兵庫県レーザ林相図ソース
-            map.addSource("hyogo-ls-standtype", {
-                type: 'raster',
-                tiles: [
-                    'https://rinya-hyogo.geospatial.jp/2023/rinya/tile/ls_standtype/{z}/{x}/{y}.png',
-                ],
-                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/ls_standtype_hyogo" target="_blank">兵庫県「レーザ林相図」</a>',
-                tileSize: 256
-            });
-
-            // 栃木県レーザ林相図ソース
-            map.addSource("tochigi-ls-standtype", {
-                type: 'raster',
-                tiles: [
-                    'https://rinya-tochigi.geospatial.jp/2023/rinya/tile/ls_standtype/{z}/{x}/{y}.png',
-                ],
-                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/ls_standtype_tochigi" target="_blank">栃木県「レーザ林相図」</a>',
-                tileSize: 256
-            });
-
-            // 高知県レーザ林相図ソース
-            map.addSource("kochi-ls-standtype", {
-                type: 'raster',
-                tiles: [
-                    'https://rinya-kochi.geospatial.jp/2023/rinya/tile/ls_standtype/{z}/{x}/{y}.png',
-                ],
-                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/ls_standtype_kochi" target="_blank">高知県「レーザ林相図」</a>',
-                tileSize: 256
-            });
-
-            // 兵庫県樹種ポリゴンソース
-            map.addSource("hyogo-tree-specie", {
-                type: 'vector',
-                tiles: [
-                    "https://rinya-hyogo.geospatial.jp/2023/rinya/tile/tree_species/{z}/{x}/{y}.pbf"
-                ],
-                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/tree_species_hyogo" target="_blank">兵庫県「樹種ポリゴン」</a>',
-            });
-
-            // 栃木県樹種ポリゴンソース
-            map.addSource("tochigi-tree-specie", {
-                type: 'vector',
-                tiles: [
-                    "https://rinya-tochigi.geospatial.jp/2023/rinya/tile/tree_species/{z}/{x}/{y}.pbf"
-                ],
-                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/tree_species_tochigi" target="_blank">栃木県「樹種ポリゴン」</a>',
-            });
-
-            // 高知県樹種ポリゴンソース
-            map.addSource("kochi-tree-specie", {
-                type: 'vector',
-                tiles: [
-                    "https://rinya-kochi.geospatial.jp/2023/rinya/tile/tree_species/{z}/{x}/{y}.pbf"
-                ],
-                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/tree_species_kochi" target="_blank">高知県「樹種ポリゴン」</a>',
-            });
-
             // 兵庫県森林資源量集計メッシュソース
             map.addSource("hyogo-fr-mesh20m", {
                 type: 'vector',
                 tiles: [
                     "https://rinya-hyogo.geospatial.jp/2023/rinya/tile/fr_mesh20m/{z}/{x}/{y}.pbf"
                 ],
-                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/fr_mesh20m_hyogo" target="_blank">兵庫県「森林資源量集計メッシュ」</a>',
+                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/fr_mesh20m_hyogo" target="_blank">兵庫県 森林資源量集計メッシュ</a>',
             });
 
             // 栃木県森林資源量集計メッシュソース
@@ -491,7 +344,7 @@
                 tiles: [
                     "https://rinya-tochigi.geospatial.jp/2023/rinya/tile/fr_mesh20m/{z}/{x}/{y}.pbf"
                 ],
-                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/fr_mesh20m_tochigi" target="_blank">栃木県「森林資源量集計メッシュ」</a>',
+                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/fr_mesh20m_tochigi" target="_blank">栃木県 森林資源量集計メッシュ</a>',
             });
 
             // 高知県森林資源量集計メッシュソース
@@ -500,7 +353,7 @@
                 tiles: [
                     "https://rinya-kochi.geospatial.jp/2023/rinya/tile/fr_mesh20m/{z}/{x}/{y}.pbf"
                 ],
-                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/fr_mesh20m_kochi" target="_blank">高知県「森林資源量集計メッシュ」</a>',
+                attribution: '<a href="https://www.geospatial.jp/ckan/dataset/fr_mesh20m_kochi" target="_blank">高知県 森林資源量集計メッシュ</a>',
             });
 
             map.showTileBoundaries = false;
@@ -525,81 +378,21 @@
         const tilessliderOpactiyValue = document.getElementById('tiles-slider-opacity-value');
 
         tilessliderOpactiy.addEventListener('input', (e) => {
-            map.setPaintProperty(
-                'hyogo-cs',
-                'raster-opacity',
-                parseInt(e.target.value, 10) / 100
-            );
-            map.setPaintProperty(
-                'tochigi-cs',
-                'raster-opacity',
-                parseInt(e.target.value, 10) / 100
-            );
-            map.setPaintProperty(
-                'kochi-cs',
-                'raster-opacity',
-                parseInt(e.target.value, 10) / 100
-            );
-            map.setPaintProperty(
-                'hyogo-slopemap',
-                'raster-opacity',
-                parseInt(e.target.value, 10) / 100
-            );
-            map.setPaintProperty(
-                'tochigi-slopemap',
-                'raster-opacity',
-                parseInt(e.target.value, 10) / 100
-            );
-            map.setPaintProperty(
-                'kochi-slopemap',
-                'raster-opacity',
-                parseInt(e.target.value, 10) / 100
-            );
-            map.setPaintProperty(
-                'hyogo-ls-standtype',
-                'raster-opacity',
-                parseInt(e.target.value, 10) / 100
-            );
-            map.setPaintProperty(
-                'tochigi-ls-standtype',
-                'raster-opacity',
-                parseInt(e.target.value, 10) / 100
-            );
-            map.setPaintProperty(
-                'kochi-ls-standtype',
-                'raster-opacity',
-                parseInt(e.target.value, 10) / 100
-            );
-            map.setPaintProperty(
-                'hyogo-tree-specie',
-                'fill-opacity',
-                parseInt(e.target.value, 10) / 100
-            );
-            map.setPaintProperty(
-                'tochigi-tree-specie',
-                'fill-opacity',
-                parseInt(e.target.value, 10) / 100
-            );
-            map.setPaintProperty(
-                'kochi-tree-specie',
-                'fill-opacity',
-                parseInt(e.target.value, 10) / 100
-            );
-            map.setPaintProperty(
-                'hyogo-fr-mesh20m',
-                'fill-opacity',
-                parseInt(e.target.value, 10) / 100
-            );
-            map.setPaintProperty(
-                'tochigi-fr-mesh20m',
-                'fill-opacity',
-                parseInt(e.target.value, 10) / 100
-            );
-            map.setPaintProperty(
-                'kochi-fr-mesh20m',
-                'fill-opacity',
-                parseInt(e.target.value, 10) / 100
-            );
+            map.setPaintProperty('hyogo-cs', 'raster-opacity', parseInt(e.target.value, 10) / 100);
+            map.setPaintProperty('tochigi-cs', 'raster-opacity', parseInt(e.target.value, 10) / 100);
+            map.setPaintProperty('kochi-cs', 'raster-opacity', parseInt(e.target.value, 10) / 100);
+            map.setPaintProperty('hyogo-slopemap', 'raster-opacity', parseInt(e.target.value, 10) / 100);
+            map.setPaintProperty('tochigi-slopemap', 'raster-opacity', parseInt(e.target.value, 10) / 100);
+            map.setPaintProperty('kochi-slopemap', 'raster-opacity', parseInt(e.target.value, 10) / 100);
+            map.setPaintProperty('hyogo-ls-standtype', 'raster-opacity', parseInt(e.target.value, 10) / 100);
+            map.setPaintProperty('tochigi-ls-standtype', 'raster-opacity', parseInt(e.target.value, 10) / 100);
+            map.setPaintProperty('kochi-ls-standtype', 'raster-opacity', parseInt(e.target.value, 10) / 100);
+            map.setPaintProperty('hyogo-tree-specie', 'fill-opacity', parseInt(e.target.value, 10) / 100);
+            map.setPaintProperty('tochigi-tree-specie', 'fill-opacity', parseInt(e.target.value, 10) / 100);
+            map.setPaintProperty('kochi-tree-specie', 'fill-opacity', parseInt(e.target.value, 10) / 100);
+            map.setPaintProperty('hyogo-fr-mesh20m', 'fill-opacity', parseInt(e.target.value, 10) / 100);
+            map.setPaintProperty('tochigi-fr-mesh20m', 'fill-opacity', parseInt(e.target.value, 10) / 100);
+            map.setPaintProperty('kochi-fr-mesh20m', 'fill-opacity', parseInt(e.target.value, 10) / 100);
             tilessliderOpactiyValue.textContent = e.target.value + '%';
         });
 
@@ -608,337 +401,77 @@
             // valueを取得
             currentLayerName = document.getElementById('tiles').value;
 
-            // 一旦、全レイヤを削除
-            if (map.getLayer('hyogo-cs')) { map.removeLayer('hyogo-cs') };
-            if (map.getLayer('tochigi-cs')) { map.removeLayer('tochigi-cs') };
-            if (map.getLayer('kochi-cs')) { map.removeLayer('kochi-cs') };
-            if (map.getLayer('hyogo-slopemap')) { map.removeLayer('hyogo-slopemap') };
-            if (map.getLayer('tochigi-slopemap')) { map.removeLayer('tochigi-slopemap') };
-            if (map.getLayer('kochi-slopemap')) { map.removeLayer('kochi-slopemap') };
-            if (map.getLayer('hyogo-ls-standtype')) { map.removeLayer('hyogo-ls-standtype') };
-            if (map.getLayer('tochigi-ls-standtype')) { map.removeLayer('tochigi-ls-standtype') };
-            if (map.getLayer('kochi-ls-standtype')) { map.removeLayer('kochi-ls-standtype') };
-            if (map.getLayer('hyogo-tree-specie')) { map.removeLayer('hyogo-tree-specie') };
-            if (map.getLayer('tochigi-tree-specie')) { map.removeLayer('tochigi-tree-specie') };
-            if (map.getLayer('kochi-tree-specie')) { map.removeLayer('kochi-tree-specie') };
-            if (map.getLayer('hyogo-fr-mesh20m')) { map.removeLayer('hyogo-fr-mesh20m') };
-            if (map.getLayer('tochigi-fr-mesh20m')) { map.removeLayer('tochigi-fr-mesh20m') };
-            if (map.getLayer('kochi-fr-mesh20m')) { map.removeLayer('kochi-fr-mesh20m') };
+            // 一旦、全レイヤを非表示
+            // CS立体図
+            if (map.getLayer('hyogo-cs')) { map.setLayoutProperty('hyogo-cs', 'visibility', 'none'); }
+            if (map.getLayer('tochigi-cs')) { map.setLayoutProperty('tochigi-cs', 'visibility', 'none'); }
+            if (map.getLayer('kochi-cs')) { map.setLayoutProperty('kochi-cs', 'visibility', 'none'); }
 
-            // レイヤを追加
+            // 傾斜区分図
+            if (map.getLayer('hyogo-slopemap')) { map.setLayoutProperty('hyogo-slopemap', 'visibility', 'none'); }
+            if (map.getLayer('tochigi-slopemap')) { map.setLayoutProperty('tochigi-slopemap', 'visibility', 'none'); }
+            if (map.getLayer('kochi-slopemap')) { map.setLayoutProperty('kochi-slopemap', 'visibility', 'none'); }
+
+            // レーザ林相図
+            if (map.getLayer('hyogo-ls-standtype')) { map.setLayoutProperty('hyogo-ls-standtype', 'visibility', 'none'); }
+            if (map.getLayer('tochigi-ls-standtype')) { map.setLayoutProperty('tochigi-ls-standtype', 'visibility', 'none'); }
+            if (map.getLayer('kochi-ls-standtype')) { map.setLayoutProperty('kochi-ls-standtype', 'visibility', 'none'); }
+
+            // 樹種ポリゴン
+            if (map.getLayer('hyogo-tree-specie')) { map.setLayoutProperty('hyogo-tree-specie', 'visibility', 'none'); }
+            if (map.getLayer('tochigi-tree-specie')) { map.setLayoutProperty('tochigi-tree-specie', 'visibility', 'none'); }
+            if (map.getLayer('kochi-tree-specie')) { map.setLayoutProperty('kochi-tree-specie', 'visibility', 'none'); }
+
+            // 森林資源量集計メッシュ
+            if (map.getLayer('hyogo-fr-mesh20m')) { map.setLayoutProperty('hyogo-fr-mesh20m', 'visibility', 'none'); }
+            if (map.getLayer('tochigi-fr-mesh20m')) { map.setLayoutProperty('tochigi-fr-mesh20m', 'visibility', 'none'); }
+            if (map.getLayer('kochi-fr-mesh20m')) { map.setLayoutProperty('kochi-fr-mesh20m', 'visibility', 'none'); }
+
+            // レイヤを表示
             if (currentLayerName === 'cs') {
-                // 兵庫県CS立体図レイヤ
-                map.addLayer({
-                    id: "hyogo-cs",
-                    type: "raster",
-                    source: "hyogo-cs",
-                    minzoom: 0,
-                    maxzoom: 18,
-                    paint: {
-                        'raster-opacity': 0.8
-                    },
-                });
-
-                // 栃木県CS立体図レイヤ
-                map.addLayer({
-                    id: "tochigi-cs",
-                    type: "raster",
-                    source: "tochigi-cs",
-                    minzoom: 0,
-                    maxzoom: 18,
-                    paint: {
-                        'raster-opacity': 0.8
-                    },
-                });
-
-                // 高知県CS立体図レイヤ
-                map.addLayer({
-                    id: "kochi-cs",
-                    type: "raster",
-                    source: "kochi-cs",
-                    minzoom: 0,
-                    maxzoom: 18,
-                    paint: {
-                        'raster-opacity': 0.8
-                    },
-                });
-            } else if (currentLayerName === 'slopemap') {
-                // 兵庫県傾斜区分図レイヤ
-                map.addLayer({
-                    id: "hyogo-slopemap",
-                    type: "raster",
-                    source: "hyogo-slopemap",
-                    minzoom: 0,
-                    maxzoom: 18,
-                    paint: {
-                        'raster-opacity': 0.8
-                    },
-                });
-
-                // 栃木県傾斜区分図レイヤ
-                map.addLayer({
-                    id: "tochigi-slopemap",
-                    type: "raster",
-                    source: "tochigi-slopemap",
-                    minzoom: 0,
-                    maxzoom: 18,
-                    paint: {
-                        'raster-opacity': 0.8
-                    },
-                });
-
-                // 高知県傾斜区分図レイヤ
-                map.addLayer({
-                    id: "kochi-slopemap",
-                    type: "raster",
-                    source: "kochi-slopemap",
-                    minzoom: 0,
-                    maxzoom: 18,
-                    paint: {
-                        'raster-opacity': 0.8
-                    },
-                });
+                map.setLayoutProperty('hyogo-cs', 'visibility', 'visible');
+                map.setLayoutProperty('tochigi-cs', 'visibility', 'visible');
+                map.setLayoutProperty('kochi-cs', 'visibility', 'visible');
+                map.setPaintProperty('hyogo-cs', 'raster-opacity', 1);
+                map.setPaintProperty('tochigi-cs', 'raster-opacity', 1);
+                map.setPaintProperty('kochi-cs', 'raster-opacity', 1);
+                map.setPaintProperty('seamlessphoto', 'raster-opacity', 0);
+            } else if (currentLayerName === 'slopemap-hyogo') {
+                map.setLayoutProperty('hyogo-slopemap', 'visibility', 'visible');
+                map.setPaintProperty('hyogo-slopemap', 'raster-opacity', 1);
+                map.setPaintProperty('seamlessphoto', 'raster-opacity', 0);
+            } else if (currentLayerName === 'slopemap-tochigi') {
+                map.setLayoutProperty('tochigi-slopemap', 'visibility', 'visible');
+                map.setPaintProperty('tochigi-slopemap', 'raster-opacity', 1);
+                map.setPaintProperty('seamlessphoto', 'raster-opacity', 0);
+            } else if (currentLayerName === 'slopemap-kochi') {
+                map.setLayoutProperty('kochi-slopemap', 'visibility', 'visible');
+                map.setPaintProperty('kochi-slopemap', 'raster-opacity', 1);
+                map.setPaintProperty('seamlessphoto', 'raster-opacity', 0);
             } else if (currentLayerName === 'ls-standtype') {
-                // 兵庫県レーザ林相図レイヤ
-                map.addLayer({
-                    id: "hyogo-ls-standtype",
-                    type: "raster",
-                    source: "hyogo-ls-standtype",
-                    minzoom: 0,
-                    maxzoom: 18,
-                    paint: {
-                        'raster-opacity': 0.8
-                    },
-                });
-
-                // 栃木県レーザ林相図レイヤ
-                map.addLayer({
-                    id: "tochigi-ls-standtype",
-                    type: "raster",
-                    source: "tochigi-ls-standtype",
-                    minzoom: 0,
-                    maxzoom: 18,
-                    paint: {
-                        'raster-opacity': 0.8
-                    },
-                });
-
-                // 高知県レーザ林相図レイヤ
-                map.addLayer({
-                    id: "kochi-ls-standtype",
-                    type: "raster",
-                    source: "kochi-ls-standtype",
-                    minzoom: 0,
-                    maxzoom: 18,
-                    paint: {
-                        'raster-opacity': 0.8
-                    },
-                });
-
+                map.setLayoutProperty('hyogo-ls-standtype', 'visibility', 'visible');
+                map.setLayoutProperty('tochigi-ls-standtype', 'visibility', 'visible');
+                map.setLayoutProperty('kochi-ls-standtype', 'visibility', 'visible');
+                map.setPaintProperty('hyogo-ls-standtype', 'raster-opacity', 1);
+                map.setPaintProperty('tochigi-ls-standtype', 'raster-opacity', 1);
+                map.setPaintProperty('kochi-ls-standtype', 'raster-opacity', 1);
+                map.setPaintProperty('seamlessphoto', 'raster-opacity', 0);
             } else if (currentLayerName === 'tree-specie') {
-                // 兵庫県樹種ポリゴンレイヤ
-                map.addLayer({
-                    id: "hyogo-tree-specie",
-                    type: "fill",
-                    source: "hyogo-tree-specie",
-                    "source-layer": "tree_species_hyogo",
-                    minzoom: 0,
-                    maxzoom: 18,
-                    paint: {
-                        'fill-opacity': 0.8,
-                        'fill-color': [
-                            'match',
-                            ['get', '解析樹種ID'],
-                            '01', '#00cc66',
-                            '02', '#99ff66',
-                            '03', '#cc0000',
-                            '04', '#ff9966',
-                            '05', '#ffcc99',
-                            '06', '#cc6600',
-                            '07', '#cc00cc',
-                            '08', '#ffff99',
-                            '09', '#ff9933',
-                            '10', '#cc9900',
-                            '11', '#ffff00',
-                            '12', '#8000ff',
-                            '96', '#8db3e2',
-                            '97', '#ccff99',
-                            '98', '#ff80ff',
-                            '99', '#bfbfbf',
-                            'rgba(255, 255, 255, 0)'  // デフォルトの色
-                        ]
-                    }
-                });
-
-                // 栃木県樹種ポリゴンレイヤ
-                map.addLayer({
-                    id: "tochigi-tree-specie",
-                    type: "fill",
-                    source: "tochigi-tree-specie",
-                    "source-layer": "tree_species_tochigi",
-                    minzoom: 0,
-                    maxzoom: 18,
-                    paint: {
-                        'fill-opacity': 0.8,
-                        'fill-color': [
-                            'match',
-                            ['get', '解析樹種ID'],
-                            '01', '#00cc66',
-                            '02', '#99ff66',
-                            '03', '#cc0000',
-                            '04', '#ff9966',
-                            '05', '#ffcc99',
-                            '06', '#cc6600',
-                            '07', '#cc00cc',
-                            '08', '#ffff99',
-                            '09', '#ff9933',
-                            '10', '#cc9900',
-                            '11', '#ffff00',
-                            '12', '#8000ff',
-                            '96', '#8db3e2',
-                            '97', '#ccff99',
-                            '98', '#ff80ff',
-                            '99', '#bfbfbf',
-                            'rgba(255, 255, 255, 0)'  // デフォルトの色
-                        ]
-                    }
-                });
-
-                // 高知県樹種ポリゴンレイヤ
-                map.addLayer({
-                    id: "kochi-tree-specie",
-                    type: "fill",
-                    source: "kochi-tree-specie",
-                    "source-layer": "tree_species_kochi",
-                    minzoom: 0,
-                    maxzoom: 18,
-                    paint: {
-                        'fill-opacity': 0.8,
-                        'fill-color': [
-                            'match',
-                            ['get', '解析樹種ID'],
-                            '01', '#00cc66',
-                            '02', '#99ff66',
-                            '03', '#cc0000',
-                            '04', '#ff9966',
-                            '05', '#ffcc99',
-                            '06', '#cc6600',
-                            '07', '#cc00cc',
-                            '08', '#ffff99',
-                            '09', '#ff9933',
-                            '10', '#cc9900',
-                            '11', '#ffff00',
-                            '12', '#8000ff',
-                            '96', '#8db3e2',
-                            '97', '#ccff99',
-                            '98', '#ff80ff',
-                            '99', '#bfbfbf',
-                            'rgba(255, 255, 255, 0)'  // デフォルトの色
-                        ]
-                    }
-                });
+                map.setLayoutProperty('hyogo-tree-specie', 'visibility', 'visible');
+                map.setLayoutProperty('tochigi-tree-specie', 'visibility', 'visible');
+                map.setLayoutProperty('kochi-tree-specie', 'visibility', 'visible');
+                map.setPaintProperty('hyogo-tree-specie', 'fill-opacity', 1);
+                map.setPaintProperty('tochigi-tree-specie', 'fill-opacity', 1);
+                map.setPaintProperty('kochi-tree-specie', 'fill-opacity', 1);
+                map.setPaintProperty('seamlessphoto', 'raster-opacity', 0);
             } else if (currentLayerName === 'fr-mesh20m') {
-                // 兵庫県森林資源量集計メッシュレイヤ
-                map.addLayer({
-                    id: "hyogo-fr-mesh20m",
-                    type: "fill",
-                    source: "hyogo-fr-mesh20m",
-                    "source-layer": "fr_mesh20m_hyogo",
-                    minzoom: 0,
-                    maxzoom: 18,
-                    paint: {
-                        'fill-opacity': 0.8,
-                        'fill-color': [
-                            'match',
-                            ['get', '解析樹種ID'],
-                            '01', '#00cc66',
-                            '02', '#99ff66',
-                            '03', '#cc0000',
-                            '04', '#ff9966',
-                            '05', '#ffcc99',
-                            '06', '#cc6600',
-                            '07', '#cc00cc',
-                            '08', '#ffff99',
-                            '09', '#ff9933',
-                            '10', '#cc9900',
-                            '11', '#ffff00',
-                            '12', '#8000ff',
-                            '96', '#8db3e2',
-                            '97', '#ccff99',
-                            '98', '#ff80ff',
-                            '99', '#bfbfbf',
-                            'rgba(255, 255, 255, 0)'  // デフォルトの色
-                        ]
-                    }
-                });
-
-                // 栃木県森林資源量集計メッシュレイヤ
-                map.addLayer({
-                    id: "tochigi-fr-mesh20m",
-                    type: "fill",
-                    source: "tochigi-fr-mesh20m",
-                    "source-layer": "fr_mesh20m_tochigi",
-                    minzoom: 0,
-                    maxzoom: 18,
-                    paint: {
-                        'fill-opacity': 0.8,
-                        'fill-color': [
-                            'match',
-                            ['get', '解析樹種ID'],
-                            '01', '#00cc66',
-                            '02', '#99ff66',
-                            '03', '#cc0000',
-                            '04', '#ff9966',
-                            '05', '#ffcc99',
-                            '06', '#cc6600',
-                            '07', '#cc00cc',
-                            '08', '#ffff99',
-                            '09', '#ff9933',
-                            '10', '#cc9900',
-                            '11', '#ffff00',
-                            '12', '#8000ff',
-                            '96', '#8db3e2',
-                            '97', '#ccff99',
-                            '98', '#ff80ff',
-                            '99', '#bfbfbf',
-                            'rgba(255, 255, 255, 0)'  // デフォルトの色
-                        ]
-                    }
-                });
-
-                // 高知県森林資源量集計メッシュレイヤ
-                map.addLayer({
-                    id: "kochi-fr-mesh20m",
-                    type: "fill",
-                    source: "kochi-fr-mesh20m",
-                    "source-layer": "fr_mesh20m_kochi",
-                    minzoom: 0,
-                    maxzoom: 18,
-                    paint: {
-                        'fill-opacity': 0.8,
-                        'fill-color': [
-                            'match',
-                            ['get', '解析樹種ID'],
-                            '01', '#00cc66',
-                            '02', '#99ff66',
-                            '03', '#cc0000',
-                            '04', '#ff9966',
-                            '05', '#ffcc99',
-                            '06', '#cc6600',
-                            '07', '#cc00cc',
-                            '08', '#ffff99',
-                            '09', '#ff9933',
-                            '10', '#cc9900',
-                            '11', '#ffff00',
-                            '12', '#8000ff',
-                            '96', '#8db3e2',
-                            '97', '#ccff99',
-                            '98', '#ff80ff',
-                            '99', '#bfbfbf',
-                            'rgba(255, 255, 255, 0)'  // デフォルトの色
-                        ]
-                    }
-                });
+                map.setLayoutProperty('hyogo-fr-mesh20m', 'visibility', 'visible');
+                map.setLayoutProperty('tochigi-fr-mesh20m', 'visibility', 'visible');
+                map.setLayoutProperty('kochi-fr-mesh20m', 'visibility', 'visible');
+                map.setPaintProperty('hyogo-fr-mesh20m', 'fill-opacity', 1);
+                map.setPaintProperty('tochigi-fr-mesh20m', 'fill-opacity', 1);
+                map.setPaintProperty('kochi-fr-mesh20m', 'fill-opacity', 1);
+                map.setPaintProperty('seamlessphoto', 'raster-opacity', 0);
             }
 
             // 凡例の表示切り替え
@@ -962,19 +495,42 @@
             }
 
             // 凡例の表示切り替え
-            if (currentLayerName === 'slopemap') {
+            if (currentLayerName === 'slopemap-hyogo') {
                 // 表示
-                document.querySelector('#legen-slopemap').style.display = 'block';
+                document.querySelector('#legen-slopemap-hyogo').style.display = 'block';
             }
             else {
                 // 非表示
-                document.querySelector('#legen-slopemap').style.display = 'none';
+                document.querySelector('#legen-slopemap-hyogo').style.display = 'none';
+            }
+
+            // 凡例の表示切り替え
+            if (currentLayerName === 'slopemap-tochigi') {
+                // 表示
+                document.querySelector('#legen-slopemap-tochigi').style.display = 'block';
+            }
+            else {
+                // 非表示
+                document.querySelector('#legen-slopemap-tochigi').style.display = 'none';
+            }
+
+            // 凡例の表示切り替え
+            if (currentLayerName === 'slopemap-kochi') {
+                // 表示
+                document.querySelector('#legen-slopemap-kochi').style.display = 'block';
+            }
+            else {
+                // 非表示
+                document.querySelector('#legen-slopemap-kochi').style.display = 'none';
             }
 
             // 不透明度の初期表示
             // valueプロパティを直接変更する
-            tilessliderOpactiyValue.textContent = '80%';
-            tilessliderOpactiy.value = "80";
+            tilessliderOpactiyValue.textContent = '100%';
+            tilessliderOpactiy.value = "100";
+
+            photosliderOpactiyValue.textContent = '0%';
+            photosliderOpactiy.value = "0";
 
         };
 
