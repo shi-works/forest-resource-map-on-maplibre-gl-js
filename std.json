@@ -13,14 +13,6 @@
 			],
 			"attribution": "<a href='https://github.com/gsi-cyberjapan/optimal_bvmap' target='_blank'>国土地理院最適化ベクトルタイル(標準地図風スタイル)</a>"
 		},
-		"gsi-dem": {
-			"type": "raster-dem",
-			"tiles": [
-				"https://x.optgeo.org/et10b/et512/{z}/{x}/{y}.webp"
-			],
-			"attribution": "<a href='https://maps.gsi.go.jp/development/ichiran.html#dem' target='_blank'>地理院タイル（標高タイル）</a>",
-			"tileSize": 512
-		},
 		"seamlessphoto": {
 			"type": "raster",
 			"tiles": [

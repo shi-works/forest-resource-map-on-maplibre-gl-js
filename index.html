@@ -131,7 +131,7 @@
     <div id="map"></div>
     <div id="select-tiles">
         <label><b>タイルの種類</b></label><br>
-        <select id="tiles" onchange="SelectTiles()">
+        <select id="tiles">
             <option value="cs">CS立体図(兵庫県・栃木県・高知県)</option>
             <option value="slopemap-hyogo">傾斜区分図(兵庫県)</option>
             <option value="slopemap-tochigi">傾斜区分図(栃木県)</option>
@@ -260,7 +260,10 @@
         <div class="square" style='background-color: rgb(254,0,0); display: inline-block;'>
         </div><span style="display: inline-block; margin-left: 5px;">45以上</span><br>
     </div>
-    <script type="text/javascript">
+    <script type="module">
+        // Terrain-RGB形式への変換モジュール
+        import { makeNumPngProtocol } from './numPngProtocol.js'
+
         // protocolの設定
         let protocol = new pmtiles.Protocol();
         maplibregl.addProtocol("pmtiles", protocol.tile);
@@ -311,7 +314,8 @@
         // 3D地形コントロール
         map.addControl(
             new maplibregl.TerrainControl({
-                source: 'gsi-dem',
+                // source: 'gsi-dem',
+                source: 'aist-dem',
                 exaggeration: 1 // 標高を強調する倍率
             })
         );
@@ -330,8 +334,21 @@
             });
             */
 
+            // 産総研 シームレス標高タイルソース
+            map.addSource("aist-dem", {
+                type: 'raster-dem',
+                tiles: [
+                    'numpng://tiles.gsj.jp/tiles/elev/mixed/{z}/{y}/{x}.png',
+                ],
+                attribution: '<a href="https://tiles.gsj.jp/tiles/elev/tiles.html" target="_blank">産業技術総合研究所 シームレス標高タイル(統合DEM)</a>',
+                tileSize: 256
+            });
+
             // 地理院 標高タイルDEMセット
-            map.setTerrain({ 'source': 'gsi-dem', 'exaggeration': 1 });
+            // map.setTerrain({ 'source': 'gsi-dem', 'exaggeration': 1 });
+
+            // 産総研 シームレス標高タイルセット
+            map.setTerrain({ 'source': 'aist-dem', 'exaggeration': 1 });
 
             map.showTileBoundaries = false;
 
@@ -373,10 +390,15 @@
             tilessliderOpactiyValue.textContent = e.target.value + '%';
         });
 
+        // イベントリスナーを追加
+        document.addEventListener('DOMContentLoaded', () => {
+            document.getElementById('tiles').addEventListener('change', SelectTiles);
+        });
+
         // タイル切り替え制御
         function SelectTiles() {
             // valueを取得
-            currentLayerName = document.getElementById('tiles').value;
+            var currentLayerName = document.getElementById('tiles').value;
 
             // 一旦、全レイヤを非表示
             // CS立体図
@@ -786,6 +808,9 @@
 
         // 森林資源量集計メッシュポップアップ表示
         map.on('click', 'tochigi-fr-mesh20m', shinrinshigenryousyukeimesh_showPopup.bind(null, 'tochigi-fr-mesh20m'));
+
+        // addProtocolを設定
+        maplibregl.addProtocol('numpng', makeNumPngProtocol());
 
     </script>
 </body>
